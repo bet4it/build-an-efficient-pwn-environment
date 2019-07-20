@@ -1,0 +1,21 @@
+session_name: pwndbg
+global_options:
+  default-shell: /bin/sleep
+  default-shell-args: infinity
+windows:
+- layout: 5d07,70x52,0,0[70x24,0,0{32x24,0,0,1,37x24,33,0[37x15,33,0,2,37x5,33,16,3,37x2,33,22,4]},70x15,0,25,5,70x11,0,41,6]
+  panes:
+  - shell_command:
+    - hyperpwn TRACE
+  - shell_command:
+    - hyperpwn STACK
+  - shell_command:
+    -
+    reuse: True
+    focus: True
+  - shell_command:
+    - hyperpwn LEGEND
+  - shell_command:
+    - hyperpwn DISASM
+  - shell_command:
+    - hyperpwn REG

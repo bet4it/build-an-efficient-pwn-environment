@@ -1,0 +1,10 @@
+{
+  "python.terminal.executeInFileDir": true,
+    "python.terminal.launchArgs": ["-m", "IPython", "--no-autoindent"],
+    "terminal.integrated.commandsToSkipShell": [
+        "-workbench.action.quickOpen"
+    ],
+    // Enable them when you use code-runner
+    // "code-runner.runInTerminal": true,
+    // "code-runner.fileDirectoryAsCwd": true,
+}

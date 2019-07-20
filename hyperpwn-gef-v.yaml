@@ -1,0 +1,21 @@
+session_name: gef
+global_options:
+  default-shell: /bin/sleep
+  default-shell-args: infinity
+windows:
+- layout: 34da,70x51,0,0[70x25,0,0{28x25,0,0,1,41x25,29,0[41x14,29,0,2,41x7,29,15,3,41x2,29,23,4]},70x14,0,26,5,70x10,0,41,6]
+  panes:
+  - shell_command:
+    - hyperpwn trace
+  - shell_command:
+    - hyperpwn stack
+  - shell_command:
+    -
+    reuse: True
+    focus: True
+  - shell_command:
+    - hyperpwn thread
+  - shell_command:
+    - hyperpwn code
+  - shell_command:
+    - hyperpwn reg
