@@ -4,7 +4,18 @@
     "terminal.integrated.commandsToSkipShell": [
         "-workbench.action.quickOpen"
     ],
+    "python.linting.pylintEnabled": false,
     // Enable them when you use code-runner
     // "code-runner.runInTerminal": true,
     // "code-runner.fileDirectoryAsCwd": true,
+
+    // Enable them when you use macros
+    // "macros.list": {
+    //     "pythonExecFile": [
+    //         "workbench.action.files.save",
+    //         "editor.action.selectAll",
+    //         "python.execSelectionInTerminal",
+    //         "cancelSelection",
+    //     ],
+    // },
 }

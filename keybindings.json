@@ -1,0 +1,6 @@
+[
+    {
+        "key": "shift+alt+enter",
+        "command": "macros.pythonExecFile"
+    }
+]

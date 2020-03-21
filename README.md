@@ -1,4 +1,4 @@
-# Build an efficient pwn development environment in 2019
+# Build an efficient pwn development environment in 2020
 
 ![](img/demo.gif)
 
@@ -9,7 +9,7 @@ I finally decided to do something to change this situation.
 So I spent some time on the usage of related tools.
 I even developed some scripts and tools to help me with a better experience.
 
-Now you could have a more efficient pwn development environment in the year of 2019.
+Now you could have a more efficient pwn development environment in the year of 2020.
 
 You can have a glimpse of the final environment in the GIF above.
 
@@ -44,7 +44,7 @@ makepkg -si
 ```
 
 Notice: this step could not be necessary if you want to use the `glibc` same as which used on the server.
-In this situation, you may need to check the [virtual environment section](https://github.com/bet4it/pwn-environment#virtual-environment) to solve it.
+In this situation, you may need to check the [virtual environment section](#virtual-environment) to solve it.
 
 ## GDB
 
@@ -52,13 +52,11 @@ The most important tool when debugging is [GDB](https://www.gnu.org/software/gdb
 (Certainly, you can use [LLDB](https://lldb.llvm.org/) if you like)
 
 You can install it by
-
 ```
 pacman -S gdb
 ```
 
 and if you need to debug ELF in other architectures rather than i386/x86\_64, you need to install `gdb-multiarch` from `AUR`:
-
 ```
 yay -S gdb-multiarch
 ```
@@ -90,12 +88,18 @@ Certainly, we can use [reverse debugging in GDB](https://www.gnu.org/software/gd
 
 Some people tried to solve this problem before like [this](https://www.youtube.com/watch?v=EU8uooZYvpE), but it was only a prototype.
 
-I have developed a new tool named [hyperpwn](https://github.com/bet4it/hyperpwn/) to solve all the problems mentioned before.
+I have developed a new tool named [hyperpwn](https://github.com/bet4it/hyperpwn) to solve all the problems mentioned before.
 
 `hyperpwn` bases on [Hyper](https://hyper.is/) terminal, you can install it by
 ```
 pacman -S hyper
 ```
+
+or you can install the git version of `Hyper` by
+```
+yay -S hyper-git
+```
+
 then follow the steps [here](https://github.com/bet4it/hyperpwn#install) to install `hyperpwn`.
 
 After `hyperpwn` is installed correctly, if you run `gdb` in `Hyper` terminal and `GEF` or `pwndbg` is loaded, a layout will be created automatically.
@@ -104,13 +108,13 @@ After `hyperpwn` is installed correctly, if you run `gdb` in `Hyper` terminal an
 
 The most widely used library to facilitate creating pwn script is [pwntools](http://pwntools.com).
 
-But `pwntools` lacks support for `Python 3` before, and `Python 2.7` [will not be maintained past 2020](https://www.python.org/dev/peps/pep-0373/).
+`pwntools` depended on `Python 2` before, which has reached its end-of-life now.
 
-Thanks to [Arusekk](https://github.com/Arusekk), currently `pwntools` supports `Python 3` in [dev3 branch](https://github.com/Gallopsled/pwntools/tree/dev3).
+Now `pwntools` also supports `Python 3`. It's time for you to write exploits in `Python 3`!
 
-We can install it easily from `AUR`:
+You can install it by:
 ```
-yay -S python-pwntools-git
+pacman -S python-pwntools
 ```
 
 ## VS Code
@@ -174,6 +178,34 @@ Like what has been mentioned before, we need to set `code-runner.fileDirectoryAs
 
 Many pwn scripts use the `interactive` function to interact with the shell, so we need to set `code-runner.runInTerminal` to `true`.
 
+#### macros
+
+When we debug pwn script, we may need to run the whole script file in REPL again and again.
+
+Instead of boring `Select all`, `Run Selection in Python Terminal` and `Cancel Selection`, we can combine these steps with one shortcut.
+
+To achive this, we need to install the [macros plugin](https://marketplace.visualstudio.com/items?itemName=ctf0.macros), then add this into [settings.json](settings.json):
+```
+    "macros.list": {
+        "pythonExecFile": [
+            "workbench.action.files.save",
+            "editor.action.selectAll",
+            "python.execSelectionInTerminal",
+            "cancelSelection",
+        ],
+    },
+```
+
+And set the shortcut in [keybindings.json](keybindings.json):
+```
+[
+    {
+        "key": "shift+alt+enter",
+        "command": "macros.pythonExecFile"
+    }
+]
+```
+
 ### Shortcuts
 
 There are some shortcuts which are very useful when we write pwn scripts:
@@ -209,13 +241,13 @@ They communicate with named pipe.
 
 Server side script [hyperpwn-server.sh](hyperpwn-server.sh) which should be used in `Hyper` terminal:
 ```sh
-#!/bin/sh
+#!/bin/bash
 pipe=/tmp/hyperpwn-pipe; if [[ ! -p $pipe ]]; then mkfifo $pipe; fi; while read line < $pipe; do sh -c "$line"; echo "Waiting for new session..."; done
 ```
 
 Client side script [hyperpwn-client.sh](hyperpwn-client.sh) which should be set as `context.terminal`:
 ```sh
-#!/bin/sh
+#!/bin/bash
 echo "cd $PWD; $1" > /tmp/hyperpwn-pipe
 ```
 
@@ -244,12 +276,12 @@ If you only have one monitor, you may want to put the `VS Code` window and the `
 I created a vertical layout of `hyperpwn`, so you can maximize the use of your monitor.
 you can overwrite configs in `~/.hyperinator` with them to enable it.
 
-If you use `GEF`, you can replace `~/.hyperinator/hyperpwn-gef.yaml` with [hyperpwn-gef-v.yaml](hyperpwn-gef-v.yaml):
+If you use `GEF`, you can replace `~/.hyperinator/hyperpwn-gef.yml` with [hyperpwn-gef.yml](hyperpwn-gef.yml):
 ```yaml
 session_name: gef
 global_options:
   default-shell: /bin/sleep
-  default-shell-args: infinity
+  default-shell-args: 100000000
 windows:
 - layout: 34da,70x51,0,0[70x25,0,0{28x25,0,0,1,41x25,29,0[41x14,29,0,2,41x7,29,15,3,41x2,29,23,4]},70x14,0,26,5,70x10,0,41,6]
   panes:
@@ -269,12 +301,12 @@ windows:
     - hyperpwn reg
 ```
 
-If you use `pwndbg`, you can replace `~/.hyperinator/hyperpwn-pwndbg.yaml` with [hyperpwn-pwndbg-v.yaml](hyperpwn-pwndbg-v.yaml):
+If you use `pwndbg`, you can replace `~/.hyperinator/hyperpwn-pwndbg.yml` with [hyperpwn-pwndbg.yml](hyperpwn-pwndbg.yml):
 ```yaml
 session_name: pwndbg
 global_options:
   default-shell: /bin/sleep
-  default-shell-args: infinity
+  default-shell-args: 100000000
 windows:
 - layout: 5d07,70x52,0,0[70x24,0,0{32x24,0,0,1,37x24,33,0[37x15,33,0,2,37x5,33,16,3,37x2,33,22,4]},70x15,0,25,5,70x11,0,41,6]
   panes:
@@ -309,10 +341,11 @@ You can use it by select `File - Perference - User Snippets - Python` and paste 
 			"except:",
 			"\tpass",
 			"",
-			"context.arch = 'amd64'",
-			"context.terminal = ['./hyperpwn-client.sh']",
+			"context.clear(arch='amd64')",
+			"context.log_level = 'debug'",
+			"context.terminal = ['~/hyperpwn-client.sh']",
 			"",
-			"filename = '${1:./a.out}'",
+			"filename = './${1:a.out}'",
 			"",
 			"elf = ELF(filename)",
 			"libc = elf.libc",
@@ -336,14 +369,44 @@ It can provide us a `Ubuntu` environment with a low cost.
 
 we can create a virtual environment by [debootstrap](https://tracker.debian.org/pkg/debootstrap), [Docker](https://www.docker.com/) or [Vagrant](https://www.vagrantup.com/).
 
-We could set up a shared directory between host and virtual environment, so we can edit the pwn script file on the host.
+I prefer to use `debootstrap` to build a chroot environment, and use `schroot` to enter it, which is very lightweight.
+You only need less than 2GB for a specify Ubuntu version.
 
-After we enter the virtual environment's Pyhon REPL manually in VS Code's integrated terminal, the `Run Selection/Line in Python Terminal` function should also work well.
+You can install them by
+```
+pacman -S debootstrap schroot
+```
 
-`hyperpwn` doesn't care about where the `gdb` is running.
-If you run `gdb` in a virtual environment on the host's `Hyper terminal` without a wrapper likes `tmux`, or if you use host's `gdb` to connect with `gdbserver` running in the virtual environment, `hyperpwn` should work likes before.
+For example, if you need an Ubuntu 16.04 environment, you can download it by
+```
+debootstrap --arch amd64 --variant=buildd xenial /srv/chroot/xenial http://archive.ubuntu.com/ubuntu/
+```
 
-So all the settings before are still meaningful when we migrate to a virtual environment.
+Copy this [xenial.conf](xenial.conf) into `/etc/schroot/chroot.d/`:
+```
+[xenial]
+description=Ubuntu 16.04
+type=directory
+directory=/srv/chroot/xenial
+shell=/bin/bash
+users=user
+root-users=user
+groups=sudo
+profile=desktop
+personality=linux
+preserve-environment=true
+```
+
+Then enter this environment by
+```
+schroot -c xenial
+```
+
+If you need other version of Ubuntu, just change `xenial` with corresponding name.
+
+We can enter the virtual environment's Pyhon REPL manually in VS Code's integrated terminal, the `Run Selection/Line in Python Terminal` function should also work well.
+
+You may need to install `pwntools` in this virtual environment again, but other tools installed on the host can just be used as before.
 
 ## Embedded environment
 
