@@ -343,7 +343,7 @@ You can use it by select `File - Perference - User Snippets - Python` and paste 
 			"",
 			"context.clear(arch='amd64')",
 			"context.log_level = 'debug'",
-			"context.terminal = ['~/hyperpwn-client.sh']",
+			"context.terminal = ['/path/to/hyperpwn-client.sh']",
 			"",
 			"filename = './${1:a.out}'",
 			"",
